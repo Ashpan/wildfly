@@ -1808,12 +1808,6 @@
             </dependency>
 
             <dependency>
-                <groupId>com.sun.xml.bind.external</groupId>
-                <artifactId>relaxng-datatype</artifactId>
-                <version>${version.sun.jaxb}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>com.github.spullara.mustache.java</groupId>
                 <artifactId>compiler</artifactId>
                 <version>${version.com.github.spullara.mustache}</version>
@@ -1919,53 +1913,9 @@
             </dependency>
 
             <dependency>
-                <groupId>com.sun.istack</groupId>
-                <artifactId>istack-commons-runtime</artifactId>
-                <version>${version.com.sun.istack}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>javax.xml.stream</groupId>
-                        <artifactId>stax-api</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.istack</groupId>
-                <artifactId>istack-commons-tools</artifactId>
-                <version>${version.com.sun.istack}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.sun</groupId>
-                        <artifactId>tools</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.ant</groupId>
-                        <artifactId>ant</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
                 <groupId>com.sun.mail</groupId>
                 <artifactId>jakarta.mail</artifactId>
                 <version>${version.jakarta.mail}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.sun.xml.bind.external</groupId>
-                <artifactId>rngom</artifactId>
-                <version>${version.sun.jaxb}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>relaxngDatatype</groupId>
-                        <artifactId>relaxngDatatype</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.sun.xml.bind.external</groupId>
-                        <artifactId>relaxng-datatype</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
@@ -2014,12 +1964,6 @@
                         <artifactId>commons-logging</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>${version.commons-codec}</version>
             </dependency>
 
             <dependency>
@@ -6425,22 +6369,6 @@
             </dependency>
 
             <dependency>
-                <groupId>org.apache.santuario</groupId>
-                <artifactId>xmlsec</artifactId>
-                <version>${version.org.apache.santuario}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.codehaus.woodstox</groupId>
-                        <artifactId>woodstox-core-asl</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
                 <groupId>org.apache.taglibs</groupId>
                 <artifactId>taglibs-standard-compat</artifactId>
                 <version>${version.org.apache.jstl}</version>
@@ -6520,6 +6448,10 @@
                     <exclusion>
                         <groupId>jakarta.xml.bind</groupId>
                         <artifactId>jakarta.xml.bind-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.santuario</groupId>
+                        <artifactId>xmlsec</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -6913,12 +6845,6 @@
 
             <dependency>
                 <groupId>org.glassfish.jaxb</groupId>
-                <artifactId>codemodel</artifactId>
-                <version>${version.sun.jaxb}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.glassfish.jaxb</groupId>
                 <artifactId>jaxb-jxc</artifactId>
                 <version>${version.sun.jaxb}</version>
                 <exclusions>
@@ -6931,54 +6857,12 @@
 
             <dependency>
                 <groupId>org.glassfish.jaxb</groupId>
-                <artifactId>jaxb-runtime</artifactId>
-                <version>${version.sun.jaxb}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>javax.activation</groupId>
-                        <artifactId>javax.activation-api</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>javax.xml.bind</groupId>
-                        <artifactId>jaxb-api</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.jvnet.staxex</groupId>
-                        <artifactId>stax-ex</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>org.glassfish.jaxb</groupId>
                 <artifactId>jaxb-xjc</artifactId>
                 <version>${version.sun.jaxb}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>com.sun.xml.dtd-parser</groupId>
                         <artifactId>dtd-parser</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>org.glassfish.jaxb</groupId>
-                <artifactId>txw2</artifactId>
-                <version>${version.sun.jaxb}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.glassfish.jaxb</groupId>
-                <artifactId>xsom</artifactId>
-                <version>${version.sun.jaxb}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.sun.xml.bind.external</groupId>
-                        <artifactId>relaxng-datatype</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>relaxngDatatype</groupId>
-                        <artifactId>relaxngDatatype</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>

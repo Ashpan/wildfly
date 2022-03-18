@@ -100,9 +100,9 @@ public class FilesystemRealmEncryptedTestCase {
     @OperateOnDeployment(DEPLOYMENT_ENCRYPTED)
     public void testEncryptionSecretKeyFail(@ArquillianResource URL webAppURL) throws Exception {
         URL url = prepareURL(webAppURL);
-        SetUpTask.setUpBadCredentialStore(SetUpTask.REALM_NAME, SetUpTask.CREDENTIAL_STORE+"New");
+        SetUpTask.setUpBadCredentialStore(SetUpTask.REALM_NAME, SetUpTask.INVALID_CREDENTIAL_STORE);
         Utils.makeCallWithBasicAuthn(url, USER, PASSWORD, SC_INTERNAL_SERVER_ERROR);
-        SetUpTask.resetCredentialStore(SetUpTask.REALM_NAME, SetUpTask.CREDENTIAL_STORE);
+        SetUpTask.tearDownBadCredentialStore(SetUpTask.REALM_NAME, SetUpTask.INVALID_CREDENTIAL_STORE);
     }
 
     private URL prepareURL(URL url) throws MalformedURLException {
@@ -114,19 +114,19 @@ public class FilesystemRealmEncryptedTestCase {
         private static final String REALM_NAME = "fsRealmEncrypted";
         private static final String DOMAIN_NAME = "fsDomainEncrypted";
         private static final String CREDENTIAL_STORE = "mycredstore";
+        private static final String INVALID_CREDENTIAL_STORE = "invalidcredstore";
         private static final String SECRET_KEY = "key";
-        private static final String PREDEFINED_HTTP_SERVER_MECHANISM_FACTORY = "global";
         private static ManagementClient managementClient;
 
 
         @Override
         public void setup(ManagementClient managementClient, java.lang.String s) throws Exception {
-            setUpTestDomain(DOMAIN_NAME, REALM_NAME, "filesystem", USER, PASSWORD, DEPLOYMENT_ENCRYPTED, CREDENTIAL_STORE, SECRET_KEY);
+            setUpTestDomain(DOMAIN_NAME, REALM_NAME, "filesystem", USER, PASSWORD, DEPLOYMENT_ENCRYPTED, CREDENTIAL_STORE, SECRET_KEY, INVALID_CREDENTIAL_STORE);
             SetUpTask.managementClient = managementClient;
             ServerReload.reloadIfRequired(managementClient);
         }
 
-        private void setUpTestDomain(String domainName, String realmName, String path, String username, String password, String deployment, String credentialStore, String secretKey) throws Exception {
+        private void setUpTestDomain(String domainName, String realmName, String path, String username, String password, String deployment, String credentialStore, String secretKey, String invalidCredentialStore) throws Exception {
             try (CLIWrapper cli =  new CLIWrapper(true)) {
                 cli.sendLine(String.format("/subsystem=elytron/secret-key-credential-store=%1$s:add(path=%1$s.cs, relative-to=jboss.server.config.dir, create=true, populate=true)",
                         credentialStore));
@@ -142,7 +142,7 @@ public class FilesystemRealmEncryptedTestCase {
                 cli.sendLine(String.format(
                         "/subsystem=undertow/application-security-domain=%s:add(security-domain=%s)",
                         deployment, domainName));
-                cli.sendLine(String.format("/subsystem=elytron/secret-key-credential-store=%1$s:add(path=%1$s.cs, relative-to=jboss.server.config.dir, create=true, populate=true)", credentialStore+"New"));
+                cli.sendLine(String.format("/subsystem=elytron/secret-key-credential-store=%1$s:add(path=%1$s.cs, relative-to=jboss.server.config.dir, create=true, populate=true)", invalidCredentialStore));
             }
         }
 
@@ -157,13 +157,11 @@ public class FilesystemRealmEncryptedTestCase {
         @Override
         public void tearDown(ManagementClient managementClient, java.lang.String s) throws Exception {
             SetUpTask.managementClient = managementClient;
-            tearDownDomain(DEPLOYMENT_ENCRYPTED, DOMAIN_NAME, REALM_NAME, USER, CREDENTIAL_STORE);
-            ServerReload.reloadIfRequired(managementClient);
-            tearDownBadSecretKey(CREDENTIAL_STORE+"New");
+            tearDownDomain(DEPLOYMENT_ENCRYPTED, DOMAIN_NAME, REALM_NAME, USER, CREDENTIAL_STORE, INVALID_CREDENTIAL_STORE);
             ServerReload.reloadIfRequired(managementClient);
         }
 
-        private static void resetCredentialStore(String realmName, String credentialStore) throws Exception {
+        private static void tearDownBadCredentialStore(String realmName, String credentialStore) throws Exception {
             try (CLIWrapper cli = new CLIWrapper(true)) {
                 cli.sendLine(String.format("/subsystem=elytron/filesystem-realm=%s:write-attribute(name=credential-store, value=%s)",
                         realmName, credentialStore));
@@ -171,7 +169,8 @@ public class FilesystemRealmEncryptedTestCase {
             ServerReload.reloadIfRequired(managementClient);
         }
 
-        private void tearDownDomain(String deployment, String domainName, String realmName, String username, String credentialStore) throws Exception {
+
+        private void tearDownDomain(String deployment, String domainName, String realmName, String username, String credentialStore, String invalidCredentialStore) throws Exception {
             try (CLIWrapper cli = new CLIWrapper(true)) {
                 cli.sendLine(String.format("/subsystem=undertow/application-security-domain=%s:remove()", deployment));
                 cli.sendLine(String.format("/subsystem=elytron/security-domain=%s:remove()",
@@ -180,13 +179,8 @@ public class FilesystemRealmEncryptedTestCase {
                 cli.sendLine(String.format("/subsystem=elytron/filesystem-realm=%s:remove()", realmName));
                 cli.sendLine(String.format("/subsystem=elytron/secret-key-credential-store=%s:remove()",
                         credentialStore));
-            }
-        }
-
-        private void tearDownBadSecretKey(String credentialStore) throws Exception {
-            try (CLIWrapper cli = new CLIWrapper(true)) {
                 cli.sendLine(String.format("/subsystem=elytron/secret-key-credential-store=%s:remove()",
-                        credentialStore));
+                        invalidCredentialStore));
             }
         }
     }
